@@ -4,6 +4,12 @@ source "https://rubygems.org"
 
 gem "jekyll-theme-chirpy", "~> 6.3", ">= 6.3.1"
 
+gem 'jekyll-compose', group: [:jekyll_plugins]
+
+group :jekyll_plugins do
+  gem 'jekyll-spaceship'
+end
+
 group :test do
   gem "html-proofer", "~> 4.4"
 end
