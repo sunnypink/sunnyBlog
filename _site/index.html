@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- `site.alt_lang` can specify a language different from the UI --><html lang="en" data-mode="dark">
+<!-- `site.alt_lang` can specify a language different from the UI --><html lang="en">
   <!-- The Head -->
 
 <head>
@@ -17,24 +17,24 @@
   
     <!-- Begin Jekyll SEO tag v2.8.0 -->
 <meta name="generator" content="Jekyll v4.3.3">
-<meta property="og:title" content="SunnyBlog">
+<meta property="og:title" content="Sunnygo">
 <meta property="og:locale" content="en">
 <meta name="description" content="A minimal, responsive and feature-rich Jekyll theme for technical writing.">
 <meta property="og:description" content="A minimal, responsive and feature-rich Jekyll theme for technical writing.">
 <link rel="canonical" href="http://localhost:4000/">
 <meta property="og:url" content="http://localhost:4000/">
-<meta property="og:site_name" content="SunnyBlog">
+<meta property="og:site_name" content="Sunnygo">
 <meta property="og:type" content="website">
 <meta name="twitter:card" content="summary">
-<meta property="twitter:title" content="SunnyBlog">
+<meta property="twitter:title" content="Sunnygo">
 <meta name="twitter:site" content="@twitter_username">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"WebSite","description":"A minimal, responsive and feature-rich Jekyll theme for technical writing.","headline":"SunnyBlog","name":"sunnygo","sameAs":["https://twitter.com/username","https://github.com/username"],"url":"http://localhost:4000/"}</script>
+{"@context":"https://schema.org","@type":"WebSite","description":"A minimal, responsive and feature-rich Jekyll theme for technical writing.","headline":"Sunnygo","name":"sunnygo","sameAs":["https://twitter.com/username","https://github.com/username"],"url":"http://localhost:4000/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
 
-  <title> | SunnyBlog
+  <title> | Sunnygo
   </title>
 
   <!--
@@ -49,8 +49,8 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png">
 <link rel="manifest" href="/assets/img/favicons/site.webmanifest">
 <link rel="shortcut icon" href="/assets/img/favicons/favicon.ico">
-<meta name="apple-mobile-web-app-title" content="SunnyBlog">
-<meta name="application-name" content="SunnyBlog">
+<meta name="apple-mobile-web-app-title" content="Sunnygo">
+<meta name="application-name" content="Sunnygo">
 <meta name="msapplication-TileColor" content="#da532c">
 <meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml">
 <meta name="theme-color" content="#ffffff">
@@ -94,6 +94,151 @@
   <!-- JavaScript -->
 
   
+    <!-- Switch the mode between dark and light. -->
+
+<script type="text/javascript">
+  class ModeToggle {
+    static get MODE_KEY() {
+      return 'mode';
+    }
+    static get MODE_ATTR() {
+      return 'data-mode';
+    }
+    static get DARK_MODE() {
+      return 'dark';
+    }
+    static get LIGHT_MODE() {
+      return 'light';
+    }
+    static get ID() {
+      return 'mode-toggle';
+    }
+
+    constructor() {
+      if (this.hasMode) {
+        if (this.isDarkMode) {
+          if (!this.isSysDarkPrefer) {
+            this.setDark();
+          }
+        } else {
+          if (this.isSysDarkPrefer) {
+            this.setLight();
+          }
+        }
+      }
+
+      let self = this;
+
+      /* always follow the system prefers */
+      this.sysDarkPrefers.addEventListener('change', () => {
+        if (self.hasMode) {
+          if (self.isDarkMode) {
+            if (!self.isSysDarkPrefer) {
+              self.setDark();
+            }
+          } else {
+            if (self.isSysDarkPrefer) {
+              self.setLight();
+            }
+          }
+
+          self.clearMode();
+        }
+
+        self.notify();
+      });
+    } /* constructor() */
+
+    get sysDarkPrefers() {
+      return window.matchMedia('(prefers-color-scheme: dark)');
+    }
+
+    get isSysDarkPrefer() {
+      return this.sysDarkPrefers.matches;
+    }
+
+    get isDarkMode() {
+      return this.mode === ModeToggle.DARK_MODE;
+    }
+
+    get isLightMode() {
+      return this.mode === ModeToggle.LIGHT_MODE;
+    }
+
+    get hasMode() {
+      return this.mode != null;
+    }
+
+    get mode() {
+      return sessionStorage.getItem(ModeToggle.MODE_KEY);
+    }
+
+    /* get the current mode on screen */
+    get modeStatus() {
+      if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) {
+        return ModeToggle.DARK_MODE;
+      } else {
+        return ModeToggle.LIGHT_MODE;
+      }
+    }
+
+    setDark() {
+      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+    }
+
+    setLight() {
+      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
+    }
+
+    clearMode() {
+      document.documentElement.removeAttribute(ModeToggle.MODE_ATTR);
+      sessionStorage.removeItem(ModeToggle.MODE_KEY);
+    }
+
+    /* Notify another plugins that the theme mode has changed */
+    notify() {
+      window.postMessage(
+        {
+          direction: ModeToggle.ID,
+          message: this.modeStatus
+        },
+        '*'
+      );
+    }
+
+    flipMode() {
+      if (this.hasMode) {
+        if (this.isSysDarkPrefer) {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
+        } else {
+          if (this.isDarkMode) {
+            this.clearMode();
+          } else {
+            this.setDark();
+          }
+        }
+      } else {
+        if (this.isSysDarkPrefer) {
+          this.setLight();
+        } else {
+          this.setDark();
+        }
+      }
+
+      this.notify();
+    } /* flipMode() */
+  } /* ModeToggle */
+
+  const modeToggle = new ModeToggle();
+</script>
+
+  
 
   <!-- A placeholder to allow defining custom metadata -->
 
@@ -113,7 +258,7 @@
     </a>
 
     <h1 class="site-title">
-      <a href="/">SunnyBlog</a>
+      <a href="/">Sunnygo</a>
     </h1>
     <p class="site-subtitle fst-italic mb-0">A text-focused Jekyll theme</p>
   </header>
@@ -175,12 +320,20 @@
 
   <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
     
+      <button type="button" class="mode-toggle btn" aria-label="Switch Mode">
+        <i class="fas fa-adjust"></i>
+      </button>
+
+      
+        <span class="icon-border"></span>
+      
+    
 
     
       
 
       
-        <a href="https://github.com/sunnypink" aria-label="github" target="_blank" rel="noopener noreferrer">
+        <a href="https://github.com/shortrina" aria-label="github" target="_blank" rel="noopener noreferrer">
           <i class="fab fa-github"></i>
         </a>
       
@@ -257,6 +410,144 @@
           <main aria-label="Main Content" class="col-12 col-lg-11 col-xl-9 px-md-4">
             
               
+
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Blog Title</title>
+    <link rel="stylesheet" href="/assets/css/main.css">
+    <!-- Add any additional stylesheets or fonts here -->
+
+
+
+<header>
+    <h1>Your Blog Name</h1>
+    <p>Welcome to your awesome blog!</p>
+</header>
+
+<main>
+    <section>
+        <h2>Latest Posts</h2>
+        <!-- Add your post listings here -->
+        
+            <article>
+                <h3><a href="/posts/gitpages/">GitPages</a></h3>
+                <p>
+</p>
+            </article>
+        
+            <article>
+                <h3><a href="/posts/github/">GitHub</a></h3>
+                <p>Security
+
+  SSH
+    
+      Command
+        
+          Enter ls -al ~/.ssh to see if existing SSH keys are present.
+            
+              $ ls -al ~/.ssh
+            
+          
+          Lists the files in your .ssh directory, if they exist
+        
+      
+    
+  
+
+</p>
+            </article>
+        
+            <article>
+                <h3><a href="/posts/myblog/">MyBlog</a></h3>
+                <p>
+</p>
+            </article>
+        
+            <article>
+                <h3><a href="/posts/saju/">SaJu</a></h3>
+                <p>
+</p>
+            </article>
+        
+            <article>
+                <h3><a href="/posts/ros/">ROS</a></h3>
+                <p>
+  ROS1 version supports is ended several years ago.
+So, If you learn ROS framework, you need to study ROS2
+
+</p>
+            </article>
+        
+            <article>
+                <h3><a href="/posts/myproject/">MyProject</a></h3>
+                <p>ImGui_TextEditor
+
+  GUI library : ImGui, glfw (based on OpenGL)
+  Language : C++17
+  Github : ‘https://github.com/shortrina/ImGui_TextEditor’
+
+</p>
+            </article>
+        
+            <article>
+                <h3><a href="/posts/linux/">Linux</a></h3>
+                <p>
+</p>
+            </article>
+        
+            <article>
+                <h3><a href="/posts/cpp/">C++</a></h3>
+                <p>CPP Reference Site
+
+  Good Example : CodeStack
+  Easy Explain : modern C++ 
+
+</p>
+            </article>
+        
+    </section>
+
+    <!-- Add more sections as needed -->
+
+</main>
+
+<footer>
+    <p>© 2024 Your Blog Name. All rights reserved.</p>
+</footer>
+
+<script src="/assets/js/main.js"></script>
+<!-- Add any additional JavaScript files or scripts here -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             
           </main>
 
@@ -563,71 +854,6 @@
         
         
 
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
 
 
   <section>
@@ -639,9 +865,6 @@
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/c/">c++</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/eng/">eng</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a>
@@ -987,71 +1210,6 @@
         
         
 
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
 
 
   <section>
@@ -1063,9 +1221,6 @@
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/c/">c++</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/eng/">eng</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a>
@@ -1166,9 +1321,16 @@
 
   
 
+  
+    
+
+    
+
+  
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/tocbot@4.21.3/dist/tocbot.min.js"></script>
 
 
 

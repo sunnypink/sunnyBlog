@@ -2,9 +2,9 @@
 
 <feed xmlns="http://www.w3.org/2005/Atom">
   <id>http://localhost:4000/</id>
-  <title>SunnyBlog</title>
+  <title>Sunnygo</title>
   <subtitle>A minimal, responsive and feature-rich Jekyll theme for technical writing.</subtitle>
-  <updated>2024-01-10T20:06:53+09:00</updated>
+  <updated>2024-01-28T19:50:00+09:00</updated>
   <author>
     <name>sunnygo</name>
     <uri>http://localhost:4000/</uri>
@@ -93,7 +93,24 @@
 
 
 
+      Security
+
+  SSH
+    
+      Command
+        
+          Enter ls -al ~/.ssh to see if existing SSH keys are present.
+            
+              $ ls -al ~/.ssh
+            
+          
+          Lists the files in your .ssh directory, if they exist
+        
       
+    
+  
+
+
 
     </summary>
   
@@ -217,6 +234,9 @@
 
 
       
+  ROS1 version supports is ended several years ago.
+So, If you learn ROS framework, you need to study ROS2
+
 
     </summary>
   

@@ -30,8 +30,8 @@
 
 
     
-    "snippet": "",
-    "content": ""
+    "snippet": "Security  SSH          Command                  Enter ls -al ~/.ssh to see if existing SSH keys are present.                          $ ls -al ~/.ssh                                Lists the files ...",
+    "content": "Security  SSH          Command                  Enter ls -al ~/.ssh to see if existing SSH keys are present.                          $ ls -al ~/.ssh                                Lists the files in your .ssh directory, if they exist                    "
   },
   
   {
@@ -81,8 +81,8 @@
 
 
     
-    "snippet": "",
-    "content": ""
+    "snippet": "  ROS1 version supports is ended several years ago.So, If you learn ROS framework, you need to study ROS2",
+    "content": "  ROS1 version supports is ended several years ago.So, If you learn ROS framework, you need to study ROS2"
   },
   
   {
@@ -98,8 +98,8 @@
 
 
     
-    "snippet": "",
-    "content": ""
+    "snippet": "ImGui_TextEditor  GUI library : ImGui, glfw (based on OpenGL)  Language : C++17  Github : ‘https://github.com/shortrina/ImGui_TextEditor’What I want to learn through this project  Familiar with C++...",
+    "content": "ImGui_TextEditor  GUI library : ImGui, glfw (based on OpenGL)  Language : C++17  Github : ‘https://github.com/shortrina/ImGui_TextEditor’What I want to learn through this project  Familiar with C++ syntax and build environment  How to compose of structure  Investigate other peoples code and learn"
   },
   
   {
@@ -120,26 +120,9 @@
   },
   
   {
-    "title": "English",
-    "url": "/posts/engliash/",
-    "categories": "language, english, Lagnuages, English",
-    "tags": "eng",
-    "date": "2024-01-10 19:25:00 +0900",
-    
-
-
-
-
-
-    
-    "snippet": "",
-    "content": ""
-  },
-  
-  {
     "title": "C++",
     "url": "/posts/cpp/",
-    "categories": "embedded, c++, EmbeddedSystem, C++",
+    "categories": "embedded, cpp, EmbeddedSystem, C++",
     "tags": "c++",
     "date": "2024-01-10 19:25:00 +0900",
     
@@ -149,8 +132,8 @@
 
 
     
-    "snippet": "",
-    "content": ""
+    "snippet": "CPP Reference Site  Good Example : CodeStack  Easy Explain : modern C++ CPP Design Pattern* [Observer Pattern](#cpp_design_pattern#Observer Pattern)",
+    "content": "CPP Reference Site  Good Example : CodeStack  Easy Explain : modern C++ CPP Design Pattern* [Observer Pattern](#cpp_design_pattern#Observer Pattern)"
   }
   
 ]

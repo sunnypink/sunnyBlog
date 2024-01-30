@@ -1,4 +1,72 @@
 ---
 layout: default
-#title: page
+#title: index
 ---
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Blog Title</title>
+    <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+    <!-- Add any additional stylesheets or fonts here -->
+</head>
+<body>
+
+<header>
+    <h1>Your Blog Name</h1>
+    <p>Welcome to your awesome blog!</p>
+</header>
+
+<main>
+    <section>
+        <h2>Latest Posts</h2>
+        <!-- Add your post listings here -->
+        {% for post in site.posts %}
+            <article>
+                <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
+                <p>{{ post.excerpt | strip_html }}</p>
+            </article>
+        {% endfor %}
+    </section>
+
+    <!-- Add more sections as needed -->
+
+</main>
+
+<footer>
+    <p>&copy; 2024 Your Blog Name. All rights reserved.</p>
+</footer>
+
+<script src="{{ '/assets/js/main.js' | relative_url }}"></script>
+<!-- Add any additional JavaScript files or scripts here -->
+
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

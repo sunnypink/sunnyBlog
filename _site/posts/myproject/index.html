@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<!-- `site.alt_lang` can specify a language different from the UI --><html lang="en" data-mode="dark">
+<!-- `site.alt_lang` can specify a language different from the UI --><html lang="en">
   <!-- The Head -->
 
 <head>
@@ -19,23 +19,23 @@
 <meta name="generator" content="Jekyll v4.3.3">
 <meta property="og:title" content="MyProject">
 <meta property="og:locale" content="en">
-<meta name="description" content="A minimal, responsive and feature-rich Jekyll theme for technical writing.">
-<meta property="og:description" content="A minimal, responsive and feature-rich Jekyll theme for technical writing.">
+<meta name="description" content="ImGui_TextEditor GUI library : ImGui, glfw (based on OpenGL) Language : C++17 Github : ‘https://github.com/shortrina/ImGui_TextEditor’">
+<meta property="og:description" content="ImGui_TextEditor GUI library : ImGui, glfw (based on OpenGL) Language : C++17 Github : ‘https://github.com/shortrina/ImGui_TextEditor’">
 <link rel="canonical" href="http://localhost:4000/posts/myproject/">
 <meta property="og:url" content="http://localhost:4000/posts/myproject/">
-<meta property="og:site_name" content="SunnyBlog">
+<meta property="og:site_name" content="Sunnygo">
 <meta property="og:type" content="article">
 <meta property="article:published_time" content="2024-01-10T19:26:00+09:00">
 <meta name="twitter:card" content="summary">
 <meta property="twitter:title" content="MyProject">
 <meta name="twitter:site" content="@twitter_username">
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-01-10T19:26:00+09:00","datePublished":"2024-01-10T19:26:00+09:00","description":"A minimal, responsive and feature-rich Jekyll theme for technical writing.","headline":"MyProject","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/myproject/"},"url":"http://localhost:4000/posts/myproject/"}</script>
+{"@context":"https://schema.org","@type":"BlogPosting","dateModified":"2024-01-10T19:26:00+09:00","datePublished":"2024-01-10T19:26:00+09:00","description":"ImGui_TextEditor GUI library : ImGui, glfw (based on OpenGL) Language : C++17 Github : ‘https://github.com/shortrina/ImGui_TextEditor’","headline":"MyProject","mainEntityOfPage":{"@type":"WebPage","@id":"http://localhost:4000/posts/myproject/"},"url":"http://localhost:4000/posts/myproject/"}</script>
 <!-- End Jekyll SEO tag -->
 
   
 
-  <title>MyProject | SunnyBlog
+  <title>MyProject | Sunnygo
   </title>
 
   <!--
@@ -50,8 +50,8 @@
 <link rel="icon" type="image/png" sizes="16x16" href="/assets/img/favicons/favicon-16x16.png">
 <link rel="manifest" href="/assets/img/favicons/site.webmanifest">
 <link rel="shortcut icon" href="/assets/img/favicons/favicon.ico">
-<meta name="apple-mobile-web-app-title" content="SunnyBlog">
-<meta name="application-name" content="SunnyBlog">
+<meta name="apple-mobile-web-app-title" content="Sunnygo">
+<meta name="application-name" content="Sunnygo">
 <meta name="msapplication-TileColor" content="#da532c">
 <meta name="msapplication-config" content="/assets/img/favicons/browserconfig.xml">
 <meta name="theme-color" content="#ffffff">
@@ -102,6 +102,151 @@
   <!-- JavaScript -->
 
   
+    <!-- Switch the mode between dark and light. -->
+
+<script type="text/javascript">
+  class ModeToggle {
+    static get MODE_KEY() {
+      return 'mode';
+    }
+    static get MODE_ATTR() {
+      return 'data-mode';
+    }
+    static get DARK_MODE() {
+      return 'dark';
+    }
+    static get LIGHT_MODE() {
+      return 'light';
+    }
+    static get ID() {
+      return 'mode-toggle';
+    }
+
+    constructor() {
+      if (this.hasMode) {
+        if (this.isDarkMode) {
+          if (!this.isSysDarkPrefer) {
+            this.setDark();
+          }
+        } else {
+          if (this.isSysDarkPrefer) {
+            this.setLight();
+          }
+        }
+      }
+
+      let self = this;
+
+      /* always follow the system prefers */
+      this.sysDarkPrefers.addEventListener('change', () => {
+        if (self.hasMode) {
+          if (self.isDarkMode) {
+            if (!self.isSysDarkPrefer) {
+              self.setDark();
+            }
+          } else {
+            if (self.isSysDarkPrefer) {
+              self.setLight();
+            }
+          }
+
+          self.clearMode();
+        }
+
+        self.notify();
+      });
+    } /* constructor() */
+
+    get sysDarkPrefers() {
+      return window.matchMedia('(prefers-color-scheme: dark)');
+    }
+
+    get isSysDarkPrefer() {
+      return this.sysDarkPrefers.matches;
+    }
+
+    get isDarkMode() {
+      return this.mode === ModeToggle.DARK_MODE;
+    }
+
+    get isLightMode() {
+      return this.mode === ModeToggle.LIGHT_MODE;
+    }
+
+    get hasMode() {
+      return this.mode != null;
+    }
+
+    get mode() {
+      return sessionStorage.getItem(ModeToggle.MODE_KEY);
+    }
+
+    /* get the current mode on screen */
+    get modeStatus() {
+      if (this.isDarkMode || (!this.hasMode && this.isSysDarkPrefer)) {
+        return ModeToggle.DARK_MODE;
+      } else {
+        return ModeToggle.LIGHT_MODE;
+      }
+    }
+
+    setDark() {
+      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.DARK_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.DARK_MODE);
+    }
+
+    setLight() {
+      document.documentElement.setAttribute(ModeToggle.MODE_ATTR, ModeToggle.LIGHT_MODE);
+      sessionStorage.setItem(ModeToggle.MODE_KEY, ModeToggle.LIGHT_MODE);
+    }
+
+    clearMode() {
+      document.documentElement.removeAttribute(ModeToggle.MODE_ATTR);
+      sessionStorage.removeItem(ModeToggle.MODE_KEY);
+    }
+
+    /* Notify another plugins that the theme mode has changed */
+    notify() {
+      window.postMessage(
+        {
+          direction: ModeToggle.ID,
+          message: this.modeStatus
+        },
+        '*'
+      );
+    }
+
+    flipMode() {
+      if (this.hasMode) {
+        if (this.isSysDarkPrefer) {
+          if (this.isLightMode) {
+            this.clearMode();
+          } else {
+            this.setLight();
+          }
+        } else {
+          if (this.isDarkMode) {
+            this.clearMode();
+          } else {
+            this.setDark();
+          }
+        }
+      } else {
+        if (this.isSysDarkPrefer) {
+          this.setLight();
+        } else {
+          this.setDark();
+        }
+      }
+
+      this.notify();
+    } /* flipMode() */
+  } /* ModeToggle */
+
+  const modeToggle = new ModeToggle();
+</script>
+
+  
 
   <!-- A placeholder to allow defining custom metadata -->
 
@@ -121,7 +266,7 @@
     </a>
 
     <h1 class="site-title">
-      <a href="/">SunnyBlog</a>
+      <a href="/">Sunnygo</a>
     </h1>
     <p class="site-subtitle fst-italic mb-0">A text-focused Jekyll theme</p>
   </header>
@@ -183,12 +328,20 @@
 
   <div class="sidebar-bottom d-flex flex-wrap  align-items-center w-100">
     
+      <button type="button" class="mode-toggle btn" aria-label="Switch Mode">
+        <i class="fas fa-adjust"></i>
+      </button>
+
+      
+        <span class="icon-border"></span>
+      
+    
 
     
       
 
       
-        <a href="https://github.com/sunnypink" aria-label="github" target="_blank" rel="noopener noreferrer">
+        <a href="https://github.com/shortrina" aria-label="github" target="_blank" rel="noopener noreferrer">
           <i class="fab fa-github"></i>
         </a>
       
@@ -328,6 +481,38 @@
   
 
   
+    
+    
+
+    
+      
+        
+        
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+      
+
+      
+      
+
+      
+      
+      
+
+      
+    
+
+    
+  
 
   
   
@@ -405,7 +590,7 @@
 
 
 <!-- return element -->
-<span class="readtime" data-bs-toggle="tooltip" data-bs-placement="bottom" title="0 words">
+<span class="readtime" data-bs-toggle="tooltip" data-bs-placement="bottom" title="41 words">
   <em>1 min</em> read</span>
 
       </div>
@@ -415,7 +600,26 @@
   </header>
 
   <div class="content">
-    
+    <h3 id="imgui_texteditor">
+<span class="me-2">ImGui_TextEditor</span><a href="#imgui_texteditor" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<ul>
+  <li>
+<strong>GUI library</strong> : ImGui, glfw (based on OpenGL)</li>
+  <li>
+<strong>Language</strong> : C++17</li>
+  <li>
+<strong>Github</strong> : ‘https://github.com/shortrina/ImGui_TextEditor’</li>
+</ul>
+
+<h3 id="what-i-want-to-learn-through-this-project">
+<span class="me-2">What I want to learn through this project</span><a href="#what-i-want-to-learn-through-this-project" class="anchor text-muted"><i class="fas fa-hashtag"></i></a>
+</h3>
+<ol>
+  <li><strong>Familiar with C++ syntax and build environment</strong></li>
+  <li><strong>How to compose of structure</strong></li>
+  <li><strong>Investigate other peoples code and learn</strong></li>
+</ol>
 
   </div>
 
@@ -471,21 +675,21 @@
 
       
 
-      <a href="https://twitter.com/intent/tweet?text=MyProject%20-%20SunnyBlog&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Fmyproject%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" aria-label="Twitter">
+      <a href="https://twitter.com/intent/tweet?text=MyProject%20-%20Sunnygo&url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Fmyproject%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Twitter" aria-label="Twitter">
         <i class="fa-fw fa-brands fa-square-x-twitter"></i>
       </a>
     
 
       
 
-      <a href="https://www.facebook.com/sharer/sharer.php?title=MyProject%20-%20SunnyBlog&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Fmyproject%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook">
+      <a href="https://www.facebook.com/sharer/sharer.php?title=MyProject%20-%20Sunnygo&u=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Fmyproject%2F" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Facebook" aria-label="Facebook">
         <i class="fa-fw fab fa-facebook-square"></i>
       </a>
     
 
       
 
-      <a href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Fmyproject%2F&text=MyProject%20-%20SunnyBlog" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" aria-label="Telegram">
+      <a href="https://t.me/share/url?url=http%3A%2F%2Flocalhost%3A4000%2Fposts%2Fmyproject%2F&text=MyProject%20-%20Sunnygo" target="_blank" rel="noopener" data-bs-toggle="tooltip" data-bs-placement="top" title="Telegram" aria-label="Telegram">
         <i class="fa-fw fab fa-telegram"></i>
       </a>
     
@@ -809,71 +1013,6 @@
         
         
 
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
 
 
   <section>
@@ -885,9 +1024,6 @@
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/c/">c++</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/eng/">eng</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a>
@@ -918,6 +1054,11 @@
               
 
 
+
+  <section id="toc-wrapper" class="ps-0 pe-4">
+    <h2 class="panel-heading ps-3 pt-2 mb-2">Contents</h2>
+    <nav id="toc"></nav>
+  </section>
 
 
             
@@ -1030,7 +1171,15 @@
 
 
 
-                  
+                  CPP Reference Site
+
+  Good Example : CodeStack
+  Easy Explain : modern C++ 
+
+
+CPP Design Pattern
+* [Observer Pattern](#cpp_design_pattern#Observer Pattern)
+
 
                 </p>
               </div>
@@ -1095,6 +1244,9 @@
 
 
                   
+  ROS1 version supports is ended several years ago.
+So, If you learn ROS framework, you need to study ROS2
+
 
                 </p>
               </div>
@@ -1446,71 +1598,6 @@
         
         
 
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-    
-  
-    
-    
-    
-    
-      
-        
-        
-
 
 
   <section>
@@ -1522,9 +1609,6 @@
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/c/">c++</a>
-      
-        
-        <a class="post-tag btn btn-outline-primary" href="/tags/eng/">eng</a>
       
         
         <a class="post-tag btn btn-outline-primary" href="/tags/github/">github</a>
@@ -1681,9 +1765,16 @@
 
   
 
+  
+    
+
+    
+
+  
 
 
-  <script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/en.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js"></script>
+
+  <script src="https://cdn.jsdelivr.net/combine/npm/jquery@3.7.1/dist/jquery.min.js,npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js,npm/simple-jekyll-search@1.10.0/dest/simple-jekyll-search.min.js,npm/loading-attribute-polyfill@2.1.1/dist/loading-attribute-polyfill.umd.min.js,npm/magnific-popup@1.1.0/dist/jquery.magnific-popup.min.js,npm/clipboard@2.0.11/dist/clipboard.min.js,npm/dayjs@1.11.10/dayjs.min.js,npm/dayjs@1.11.10/locale/en.min.js,npm/dayjs@1.11.10/plugin/relativeTime.min.js,npm/dayjs@1.11.10/plugin/localizedFormat.min.js,npm/tocbot@4.21.3/dist/tocbot.min.js"></script>
 
 
 
